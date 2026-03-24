@@ -19,10 +19,10 @@ def get_rgb_mask(img_rgb):
     mask_rgb_raw = cv2.inRange(img_rgb, lower_rgb, upper_rgb)
     mask_rgb_inverted = cv2.bitwise_not(mask_rgb_raw)
     
-    kernel_open_rgb = np.ones((10, 10), np.uint8)
+    kernel_open_rgb = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10, 10))
     mask_rgb_open = cv2.morphologyEx(mask_rgb_inverted, cv2.MORPH_OPEN, kernel_open_rgb)
     
-    kernel_close_rgb = np.ones((12, 12), np.uint8)
+    kernel_close_rgb = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (12, 12))
     mask_rgb_final = cv2.morphologyEx(mask_rgb_open, cv2.MORPH_CLOSE, kernel_close_rgb)
     
     return mask_rgb_final
@@ -34,11 +34,11 @@ def get_hsv_mask(img_bgr):
     img_blurred = cv2.GaussianBlur(img_bgr, (7, 7), 0)
     img_hsv = cv2.cvtColor(img_blurred, cv2.COLOR_BGR2HSV)
     
-    lower_hsv = np.array([0, 0, 40]) 
-    upper_hsv = np.array([180, 60, 220])
+    lower_hsv = np.array([0, 0, 50]) 
+    upper_hsv = np.array([180, 50, 230])
     mask_hsv_raw = cv2.inRange(img_hsv, lower_hsv, upper_hsv)
     
-    kernel_open_hsv = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9))
+    kernel_open_hsv = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10, 10))
     mask_hsv_open = cv2.morphologyEx(mask_hsv_raw, cv2.MORPH_OPEN, kernel_open_hsv)
     
     kernel_close_hsv = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))
